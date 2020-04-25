@@ -5,4 +5,5 @@ public class dd {
     private int b;
     private int c;
     private int bb;
+    private int bbbb;
 }
