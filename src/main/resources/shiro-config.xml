@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd"> <!-- 3.配置 realm -->
+    <bean id="myRealm" class="com.xuan.realm.MyRealm">
+        <property name="credentialsMatcher">
+            <!-- 凭证匹配器:带 MD5 加密的，支持多种加密方式 -->
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <!-- 配置加密算法类型 -->
+                <property name="hashAlgorithmName" value="MD5"></property>
+                <!-- 指定加密次数 -->
+                <property name="hashIterations" value="1024"></property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 2.配置安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="myRealm"></property>
+    </bean>
+
+    <!-- 4.配置 shiro 的生命周期管理器 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor">
+    </bean>
+
+    <!-- 1.配置 shiroFilter -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- 配置安全管理器 -->
+        <property name="securityManager" ref="securityManager"></property>
+        <!-- 配置登录 url：当访问需要认证的资源时如果没有认证将自动跳转到 url 上 -->
+        <property name="loginUrl" value="/index.html"></property>
+        <!-- 配置认证成功后跳转到的页面，通常不设置，如果不设置默认跳转到上一个 url -->
+        <property name="successUrl" value="/success.html"></property>
+        <!-- 配置用户没有权限访问资源时跳转到的页面:授权失败 -->
+        <property name="unauthorizedUrl" value="/refuse.html"></property>
+        <!-- 配置 shiro 的过滤器链 -->
+        <property name="filterChainDefinitions">
+            <value>
+                <!-- 对静态资源进行匿名访问 -->
+                /index.html=anon
+                <!-- 不会删除 session、清空之前所有的缓存 -->
+                /loginout=logout
+                <!-- 其他资源都必须经过认证 -->
+                /** = authc
+            </value>
+        </property>
+    </bean>
+</beans>

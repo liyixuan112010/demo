@@ -1,0 +1,6 @@
+<ehcache>
+    <cache name="aaa" maxElementsInMemory="10000" eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true"/>
+    <cache name="bbb" maxElementsInMemory="10000" eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true"/>
+</ehcache>
