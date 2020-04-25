@@ -4,5 +4,4 @@ public class dd {
     private int a;
     private int b;
     private int c;
-    private int bbcc;
 }
